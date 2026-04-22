@@ -34,13 +34,84 @@ Banditji 計劃實施 Siruseri 有史以來最驚天動地的 ATM 搶劫行動�
 
 ## 解題思路
 
-*請填入你的解題思路*
+使用 SCC 壓縮圖後，在 DAG 上做最大路徑 DP。
 
 ## 解題代碼
 
 ```python
-# 你的代碼這裡
-```
+import sys
+sys.setrecursionlimit(10**7)
+
+N,M = map(int,input().split())
+graph=[[] for _ in range(N)]
+rev=[[] for _ in range(N)]
+
+for _ in range(M):
+    u,v=map(int,input().split())
+    u-=1;v-=1
+    graph[u].append(v)
+    rev[v].append(u)
+
+money=[int(input()) for _ in range(N)]
+S,P=map(int,input().split())
+S-=1
+bars=set(map(lambda x:int(x)-1,input().split()))
+
+visited=[False]*N
+order=[]
+
+def dfs1(u):
+    visited[u]=True
+    for v in graph[u]:
+        if not visited[v]:
+            dfs1(v)
+    order.append(u)
+
+for i in range(N):
+    if not visited[i]:
+        dfs1(i)
+
+comp=[-1]*N
+
+def dfs2(u,c):
+    comp[u]=c
+    for v in rev[u]:
+        if comp[v]==-1:
+            dfs2(v,c)
+
+cid=0
+for u in reversed(order):
+    if comp[u]==-1:
+        dfs2(u,cid)
+        cid+=1
+
+scc_money=[0]*cid
+for i in range(N):
+    scc_money[comp[i]]+=money[i]
+
+dag=[[] for _ in range(cid)]
+for u in range(N):
+    for v in graph[u]:
+        if comp[u]!=comp[v]:
+            dag[comp[u]].append(comp[v])
+
+dp=[-1]*cid
+
+def solve(u):
+    if dp[u]!=-1:
+        return dp[u]
+    best=0
+    for v in dag[u]:
+        best=max(best,solve(v))
+    dp[u]=best+scc_money[u]
+    return dp[u]
+
+ans=0
+for i in bars:
+    ans=max(ans,solve(comp[i]))
+
+print(ans)
+
 
 ## 測試用例
 
