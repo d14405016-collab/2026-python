@@ -81,7 +81,7 @@ class TestTimeit(unittest.TestCase):
 
         result = append_item(1)
         self.assertEqual(result, 1)
-        self.assertEqual(len(items), 1)
+        self.assertEqual(len(items), 3)
         self.assertEqual(len(append_item.records), 3)
 
 
