@@ -14,7 +14,7 @@ class TestDigitalRoot(unittest.TestCase):
         self.assertEqual(digital_root(80, 9), 8)
 
     def test_large_number(self):
-        self.assertEqual(digital_root(1000000000, 9), 1)
+        self.assertEqual(digital_root(1000000000, 9), 8)
 
     def test_base_2_simple(self):
         self.assertEqual(digital_root(3, 2), 1)
